@@ -1,0 +1,49 @@
+<!-- qrcodes/templates/qrcodes/qrcodes.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>QR Code Management</title>
+    <!-- 引入CSS样式和JavaScript文件 -->
+</head>
+<body>
+    <h1>QR Code Management</h1>
+
+    <!-- 显示QR码列表 -->
+    <div>
+        <h2>QR Codes List</h2>
+        <ul>
+            {% for qrcode in qrcodes %}
+                <li>
+                    <img src="{{ qrcode.code.url }}" alt="QR Code Image">
+                    <p>Activity: {{ qrcode.activity.title }}</p>
+                    <!-- 添加编辑和删除按钮 -->
+                    <a href="{% url 'activity_edit' qrcode.id %}">Edit</a>
+                    <a href="{% url 'activity_delete' qrcode.id %}">Delete</a>
+                </li>
+            {% empty %}
+                <p>No QR codes available.</p>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- 添加新QR码的表单 -->
+    <div>
+        <h2>Add New QR Code</h2>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <!-- 表单字段 -->
+            <label for="activity">Activity:</label>
+            <select name="activity" id="activity">
+                {% for activity in activities %}
+                    <option value="{{ activity.id }}">{{ activity.title }}</option>
+                {% endfor %}
+            </select>
+            <label for="code">QR Code Image:</label>
+            <input type="file" name="code" id="code" required>
+            <!-- 提交按钮 -->
+            <button type="submit">Add QR Code</button>
+        </form>
+    </div>
+</body>
+</html>
